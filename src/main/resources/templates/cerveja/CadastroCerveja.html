@@ -8,7 +8,7 @@
 <head>
 <title>Cadastro de cerveja</title>
 
-<link rel="stylesheet" th:href="@{/stylesheets/vendors/upload.min.css}" />
+<link rel="stylesheet" th:href="@{/stylesheets/brewer.css}" />
 </head>
 
 <body>
@@ -16,9 +16,27 @@
 
 		<div class="page-header">
 			<div class="container-fluid">
-				<h1>Cadastro de cerveja</h1>
+				<div class="row">
+					<div class="col-sm-10">
+						<h1>Cadastro de cerveja</h1>
+					</div>
+
+					<div class="col-sm-2">
+						<div class="aw-page-header-controls">
+							<a class="btn  btn-default" th:href="@{/cerveja}">
+								<i class="glyphicon  glyphicon-plus-sign"></i>
+								<span class="hidden-xs  hidden-sm">Pesquisa</span>
+							</a>
+						</div>
+					</div>
+				</div>
 			</div>
 		</div>
+
+
+
+
+
 
 		<div class="container-fluid">
 
@@ -30,26 +48,30 @@
 				<brewer:message />
 
 				<div class="row">
-					<div class="col-sm-2  form-group  bw-required" brewer:classforerror="sku">
+					<div class="col-sm-2  form-group  bw-required"
+						brewer:classforerror="sku">
 						<label for="sku" class="control-label">SKU</label>
 						<input id="sku" type="text" class="form-control" th:field="*{sku}" />
 					</div>
 
-					<div class="col-sm-10  form-group  bw-required" brewer:classforerror="nome">
+					<div class="col-sm-10  form-group  bw-required"
+						brewer:classforerror="nome">
 						<label for="nome" class="control-label">Nome</label>
 						<input id="nome" type="text" class="form-control"
 							th:field="*{nome}" />
 					</div>
 				</div>
 
-				<div class="form-group  bw-required" brewer:classforerror="descricao">
+				<div class="form-group  bw-required"
+					brewer:classforerror="descricao">
 					<label for="descricao" class="control-label">Descrição</label>
 					<textarea id="descricao" rows="3" class="form-control"
 						th:field="*{descricao}"></textarea>
 				</div>
 
 				<div class="row">
-					<div class="col-sm-3  form-group  bw-required" brewer:classforerror="estilo">
+					<div class="col-sm-3  form-group  bw-required"
+						brewer:classforerror="estilo">
 						<label for="estilo" class="control-label">Estilo</label>
 						<div class="bw-field-action">
 							<select id="estilo" class="form-control" th:field="*{estilo}">
@@ -68,7 +90,8 @@
 						</div>
 					</div>
 
-					<div class="col-sm-3  form-group  bw-required" brewer:classforerror="sabor">
+					<div class="col-sm-3  form-group  bw-required"
+						brewer:classforerror="sabor">
 						<label for="sabor" class="control-label">Sabor</label>
 						<select id="sabor" class="form-control" th:field="*{sabor}">
 							<option value="">Selecione o sabor</option>
@@ -77,7 +100,7 @@
 						</select>
 					</div>
 
-					<div class="col-sm-3  form-group  bw-required"  
+					<div class="col-sm-3  form-group  bw-required"
 						brewer:classforerror="teorAlcoolico">
 						<label for="teorAlcoolico" class="control-label">Teor
 							alcoólico</label>
@@ -104,7 +127,8 @@
 				</div>
 
 				<div class="row">
-					<div class="col-sm-3  form-group  bw-required" brewer:classforerror="valor">
+					<div class="col-sm-3  form-group  bw-required"
+						brewer:classforerror="valor">
 						<label for="valor" class="control-label">Valor</label>
 						<div class="input-group">
 							<div class="input-group-addon">R$</div>
@@ -113,7 +137,8 @@
 						</div>
 					</div>
 
-					<div class="col-sm-3  form-group  bw-required" brewer:classforerror="comissao">
+					<div class="col-sm-3  form-group  bw-required"
+						brewer:classforerror="comissao">
 						<label for="comissao" class="control-label">Comissão</label>
 						<div class="input-group">
 							<input id="comissao" type="text" class="form-control  js-decimal"
@@ -137,7 +162,8 @@
 
 						<label class="control-label">Foto</label>
 
-						<div class="js-container-foto-cerveja" th:attr="data-url-fotos=@{/foto}">
+						<div class="js-container-foto-cerveja"
+							th:attr="data-url-fotos=@{/foto}">
 							<div id="upload-drop" class="bw-upload">
 								<i class="glyphicon  glyphicon-cloud-upload"></i>
 								<span>Arraste a foto aqui ou </span>
@@ -168,7 +194,7 @@
 		<script th:src="@{/javascripts/vendors/handlebars.min.js}"></script>
 		<script th:src="@{/javascripts/cerveja.upload-foto.js}"></script>
 
-		
+
 	</th:block>
 
 </body>
