@@ -3,6 +3,8 @@ package com.buzzworks.brewer.controller;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -17,6 +19,7 @@ import com.buzzworks.brewer.model.Origem;
 import com.buzzworks.brewer.model.Sabor;
 import com.buzzworks.brewer.repository.Cervejas;
 import com.buzzworks.brewer.repository.Estilos;
+import com.buzzworks.brewer.repository.filter.CervejaFilter;
 import com.buzzworks.brewer.service.CadastroCervejaService;
 
 @Controller
@@ -58,13 +61,13 @@ public class CervejasController {
 	}
 	
 	@GetMapping
-	public ModelAndView pesquisar() {
+	public ModelAndView pesquisar(CervejaFilter cervejaFilter, BindingResult result, @PageableDefault(size = 2) Pageable pageable) {
 		ModelAndView mv = new ModelAndView("cerveja/PesquisaCervejas");
 		mv.addObject("estilos", estilos.findAll());
 		mv.addObject("sabores", Sabor.values());
 		mv.addObject("origens", Origem.values());
 		
-		mv.addObject("cervejas", cervejas.findAll());
+		mv.addObject("cervejas", cervejas.filtrar(cervejaFilter, pageable));
 		return mv;
 	}
 
