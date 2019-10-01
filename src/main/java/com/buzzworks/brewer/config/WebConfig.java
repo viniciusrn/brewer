@@ -4,6 +4,9 @@ import java.math.BigDecimal;
 import java.util.Locale;
 
 import org.springframework.beans.BeansException;
+import org.springframework.cache.CacheManager;
+import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.cache.concurrent.ConcurrentMapCacheManager;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Bean;
@@ -27,6 +30,8 @@ import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ITemplateResolver;
 
 import com.buzzworks.brewer.controller.CervejasController;
+import com.buzzworks.brewer.controller.converter.CidadeConverter;
+import com.buzzworks.brewer.controller.converter.EstadoConverter;
 import com.buzzworks.brewer.controller.converter.EstiloConverter;
 import com.buzzworks.brewer.thymeleaf.BrewerDialect;
 import com.github.mxab.thymeleaf.extras.dataattribute.dialect.DataAttributeDialect;
@@ -37,6 +42,7 @@ import nz.net.ultraq.thymeleaf.LayoutDialect;
 @ComponentScan(basePackageClasses = { CervejasController.class })
 @EnableWebMvc
 @EnableSpringDataWebSupport
+@EnableCaching
 public class WebConfig extends WebMvcConfigurerAdapter implements ApplicationContextAware {
 
 	private ApplicationContext applicationContext;
@@ -44,7 +50,6 @@ public class WebConfig extends WebMvcConfigurerAdapter implements ApplicationCon
 	@Override
 	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
 		this.applicationContext = applicationContext;
-
 	}
 
 	@Bean
@@ -75,29 +80,36 @@ public class WebConfig extends WebMvcConfigurerAdapter implements ApplicationCon
 		resolver.setTemplateMode(TemplateMode.HTML);
 		return resolver;
 	}
-
+	
 	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
 		registry.addResourceHandler("/**").addResourceLocations("classpath:/static/");
 	}
-
+	
 	@Bean
 	public FormattingConversionService mvcConversionService() {
 		DefaultFormattingConversionService conversionService = new DefaultFormattingConversionService();
 		conversionService.addConverter(new EstiloConverter());
+		conversionService.addConverter(new CidadeConverter());
+		conversionService.addConverter(new EstadoConverter());
 		
 		NumberStyleFormatter bigDecimalFormatter = new NumberStyleFormatter("#,##0.00");
 		conversionService.addFormatterForFieldType(BigDecimal.class, bigDecimalFormatter);
 		
-		NumberStyleFormatter IntegerFormatter = new NumberStyleFormatter("#,##0");
-		conversionService.addFormatterForFieldType(Integer.class, IntegerFormatter);
+		NumberStyleFormatter integerFormatter = new NumberStyleFormatter("#,##0");
+		conversionService.addFormatterForFieldType(Integer.class, integerFormatter);
 		
 		return conversionService;
 	}
 	
-	@Bean 
+	@Bean
 	public LocaleResolver localeResolver() {
-		return new FixedLocaleResolver(new Locale("pt","BR"));
+		return new FixedLocaleResolver(new Locale("pt", "BR"));
 	}
-
+	
+	@Bean
+	public CacheManager cacheManager() {
+		return new ConcurrentMapCacheManager();
+	}
+	
 }
