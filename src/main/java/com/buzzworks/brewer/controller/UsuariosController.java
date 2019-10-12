@@ -1,18 +1,30 @@
 package com.buzzworks.brewer.controller;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.buzzworks.brewer.controller.page.PageWrapper;
 import com.buzzworks.brewer.model.Usuario;
 import com.buzzworks.brewer.repository.Grupos;
+import com.buzzworks.brewer.repository.Usuarios;
+import com.buzzworks.brewer.repository.filter.UsuarioFilter;
 import com.buzzworks.brewer.service.CadastroUsuarioService;
+import com.buzzworks.brewer.service.StatusUsuario;
 import com.buzzworks.brewer.service.exception.EmailUsuarioJaCadastradoException;
 import com.buzzworks.brewer.service.exception.SenhaObrigatoriaUsuarioException;
 
@@ -25,6 +37,9 @@ public class UsuariosController {
 	
 	@Autowired
 	private Grupos grupos;
+	
+	@Autowired
+	private Usuarios usuarios;
 
 	@RequestMapping("/novo")
 	public ModelAndView novo(Usuario usuario) {
@@ -52,5 +67,24 @@ public class UsuariosController {
 		attributes.addFlashAttribute("mensagem", "Usuário salvo com sucesso");
 		return new ModelAndView("redirect:/usuario/novo");
 	}
+	
+	@GetMapping
+	public ModelAndView pesquisar(UsuarioFilter usuarioFilter
+			, @PageableDefault(size = 3) Pageable pageable, HttpServletRequest httpServletRequest) {
+		ModelAndView mv = new ModelAndView("/usuario/PesquisaUsuarios");
+		mv.addObject("grupos", grupos.findAll());
+		
+		PageWrapper<Usuario> paginaWrapper = new PageWrapper<>(usuarios.filtrar(usuarioFilter, pageable)
+				, httpServletRequest);
+		mv.addObject("pagina", paginaWrapper);
+		return mv;
+	}
+	
+	@PutMapping("/status")
+	@ResponseStatus(HttpStatus.OK)
+	public void atualizarStatus(@RequestParam("codigos[]") Long[] codigos, @RequestParam("status") StatusUsuario statusUsuario) {
+		cadastroUsuarioService.alterarStatus(codigos, statusUsuario);
+	}
+	
 	
 }
