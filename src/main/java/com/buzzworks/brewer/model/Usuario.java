@@ -1,4 +1,4 @@
-package com.buzzworks.brewer.model.validation.group;
+package com.buzzworks.brewer.model;
 
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -14,14 +14,12 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
 
-import com.buzzworks.brewer.model.Grupo;
 import com.buzzworks.brewer.validation.AtributoConfirmacao;
-
 
 @AtributoConfirmacao(atributo = "senha", atributoConfirmacao = "confirmacaoSenha", message = "Confirmação da senha não confere")
 @Entity
@@ -42,16 +40,15 @@ public class Usuario implements Serializable {
 	private String email;
 
 	private String senha;
-	
+
 	@Transient
 	private String confirmacaoSenha;
 
 	private Boolean ativo;
 
-	@NotNull(message = "Selecione pelo menos um grupo")
+    @Size(min = 1, message = "Selecione pelo menos um grupo")
 	@ManyToMany
-	@JoinTable(name = "usuario_grupo", joinColumns = @JoinColumn(name = "codigo_usuario")
-				, inverseJoinColumns = @JoinColumn(name = "codigo_grupo"))	
+	@JoinTable(name = "usuario_grupo", joinColumns = @JoinColumn(name = "codigo_usuario"), inverseJoinColumns = @JoinColumn(name = "codigo_grupo"))
 	private List<Grupo> grupos;
 
 	@Column(name = "data_nascimento")
@@ -119,6 +116,9 @@ public class Usuario implements Serializable {
 
 	public void setConfirmacaoSenha(String confirmacaoSenha) {
 		this.confirmacaoSenha = confirmacaoSenha;
+	}
+	public boolean isNovo() {
+		return codigo == null;
 	}
 
 	@Override

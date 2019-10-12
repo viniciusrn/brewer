@@ -4,10 +4,10 @@ import javax.servlet.Filter;
 import javax.servlet.MultipartConfigElement;
 import javax.servlet.ServletRegistration.Dynamic;
 
-import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
 import com.buzzworks.brewer.config.JPAConfig;
+import com.buzzworks.brewer.config.SecurityConfig;
 import com.buzzworks.brewer.config.ServiceConfig;
 import com.buzzworks.brewer.config.WebConfig;
 
@@ -15,29 +15,22 @@ public class Appinitializer extends AbstractAnnotationConfigDispatcherServletIni
 
 	@Override
 	protected Class<?>[] getRootConfigClasses() {
-		
-		return new Class<?>[] { JPAConfig.class, ServiceConfig.class };
+		return new Class<?>[] { JPAConfig.class, ServiceConfig.class, SecurityConfig.class };
 	}
 
 	@Override
 	protected Class<?>[] getServletConfigClasses() {
-		
-		return new Class<?>[] { WebConfig.class};
+		return new Class<?>[] { WebConfig.class };
 	}
 
 	@Override
 	protected String[] getServletMappings() {
-		
-		return new String[] {"/"};
-	}	
+		return new String[] { "/" };
+	}
 	
 	@Override
 	protected Filter[] getServletFilters() {
-		CharacterEncodingFilter characterEncodingFilter = new CharacterEncodingFilter();
-		characterEncodingFilter.setEncoding("UTF-8");
-		characterEncodingFilter.setForceEncoding(true);
-		
-		return new Filter[] { characterEncodingFilter };
+        return new Filter[] { };
 	}
 	
 	@Override

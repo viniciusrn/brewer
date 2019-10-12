@@ -44,7 +44,7 @@
 
 
 			<form method="POST" th:object="${cerveja}"
-				class="form-vertical  js-form-loading">
+				class="form-vertical  js-form-loading" th:action="@{/cerveja/novo}">
 				<brewer:message />
 
 				<div class="row">
